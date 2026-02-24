@@ -1,0 +1,42 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2f3542;
+    color: white;
+    font-family: sans-serif;
+}
+
+#tabuleiro {
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(8, 60px);
+    border: 5px solid #57606f;
+    user-select: none;
+}
+
+.quadrado {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+/* Cores do Tabuleiro */
+.bege { background-color: #eeeed2; }
+.verde { background-color: #769656; }
+
+/* Destaque para seleção */
+.selecionado {
+    background-color: #f6e58d !important;
+}
+
+.creditos {
+    margin-top: 20px;
+    padding: 10px;
+    background: #1e272e;
+    border-radius: 8px;
+}
