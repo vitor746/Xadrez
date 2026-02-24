@@ -3,19 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xadrez JS - Victor Desenvolvimento</title>
+    <title>Chess Pro | Victor Desenvolvimento</title>
+    <!-- Importando fontes modernas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Xadrez Interativo</h1>
-    
-    <div id="tabuleiro"></div>
+    <div class="app-container">
+        <header>
+            <h1>CHESS <span class="highlight">MASTER</span></h1>
+            <div id="game-status">Vez das Brancas</div>
+        </header>
 
-    <div class="creditos">
-        Desenvolvido por: <strong>Victor Desenvolvimento</strong>
+        <main class="board-container">
+            <div id="chess-board"></div>
+        </main>
+
+        <footer>
+            <div class="dev-credit">
+                <span>PROJECT BY</span>
+                <div class="badge">VICTOR DESENVOLVIMENTO</div>
+            </div>
+        </footer>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
+
