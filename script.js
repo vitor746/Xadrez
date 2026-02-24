@@ -1,56 +1,85 @@
-const tabuleiro = document.getElementById('tabuleiro');
-let pecaSelecionada = null;
+const boardElement = document.getElementById('chess-board');
+const statusElement = document.getElementById('game-status');
 
-// Mapeamento das peças (Unicode)
-const pecas iniciais = [
-    ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
-    ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
+let selectedSquare = null;
+let whiteTurn = true;
+
+// Mapa de peças (Unicode para visual clássico e limpo)
+const pieces = {
+    white: {
+        k: '♔', q: '♕', r: '♖', b: '♗', n: '♘', p: '♙'
+    },
+    black: {
+        k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟'
+    }
+};
+
+// Layout inicial
+const initialLayout = [
+    [pieces.black.r, pieces.black.n, pieces.black.b, pieces.black.q, pieces.black.k, pieces.black.b, pieces.black.n, pieces.black.r],
+    [pieces.black.p, pieces.black.p, pieces.black.p, pieces.black.p, pieces.black.p, pieces.black.p, pieces.black.p, pieces.black.p],
     ['', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', ''],
-    ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
-    ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖']
+    [pieces.white.p, pieces.white.p, pieces.white.p, pieces.white.p, pieces.white.p, pieces.white.p, pieces.white.p, pieces.white.p],
+    [pieces.white.r, pieces.white.n, pieces.white.b, pieces.white.q, pieces.white.k, pieces.white.b, pieces.white.n, pieces.white.r]
 ];
 
-// Criar o tabuleiro
-function criarTabuleiro() {
-    for (let linha = 0; linha < 8; linha++) {
-        for (let coluna = 0; coluna < 8; coluna++) {
-            const quadrado = document.createElement('div');
-            quadrado.classList.add('quadrado');
+function createBoard() {
+    boardElement.innerHTML = '';
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            const square = document.createElement('div');
+            const isLight = (r + c) % 2 === 0;
             
-            // Definir cor alternada
-            const cor = (linha + coluna) % 2 === 0 ? 'bege' : 'verde';
-            quadrado.classList.add(cor);
+            square.classList.add('square');
+            square.classList.add(isLight ? 'light' : 'dark');
+            square.dataset.row = r;
+            square.dataset.col = c;
+            square.innerHTML = initialLayout[r][c];
             
-            // Colocar peça inicial
-            quadrado.innerText = pecas[linha][coluna];
-            
-            // Evento de clique
-            quadrado.onclick = () => gerenciarClique(quadrado);
-            
-            tabuleiro.appendChild(quadrado);
+            square.addEventListener('click', () => handleSquareClick(square));
+            boardElement.appendChild(square);
         }
     }
 }
 
-function gerenciarClique(quadrado) {
-    if (pecaSelecionada) {
-        // Se já tem uma peça selecionada, move para o novo quadrado
-        if (quadrado !== pecaSelecionada) {
-            quadrado.innerText = pecaSelecionada.innerText;
-            pecaSelecionada.innerText = '';
+function handleSquareClick(square) {
+    const piece = square.innerHTML;
+
+    if (selectedSquare) {
+        // Se clicar na mesma peça, desmarca
+        if (selectedSquare === square) {
+            deselect();
+            return;
         }
-        pecaSelecionada.classList.remove('selecionado');
-        pecaSelecionada = null;
+
+        // Realiza o movimento (Lógica simplificada de troca)
+        square.innerHTML = selectedSquare.innerHTML;
+        selectedSquare.innerHTML = '';
+        
+        // Alterna turno
+        whiteTurn = !whiteTurn;
+        statusElement.innerText = whiteTurn ? "Vez das Brancas" : "Vez das Pretas";
+        statusElement.style.color = whiteTurn ? "#f0f6fc" : "#2f81f7";
+
+        deselect();
     } else {
-        // Seleciona a peça se o quadrado não estiver vazio
-        if (quadrado.innerText !== '') {
-            pecaSelecionada = quadrado;
-            quadrado.classList.add('selecionado');
+        // Seleciona apenas se o quadrado não estiver vazio
+        if (piece !== '') {
+            selectedSquare = square;
+            square.classList.add('selected');
         }
     }
 }
 
-criarTabuleiro();
+function deselect() {
+    if (selectedSquare) {
+        selectedSquare.classList.remove('selected');
+        selectedSquare = null;
+    }
+}
+
+// Iniciar
+window.onload = createBoard;
